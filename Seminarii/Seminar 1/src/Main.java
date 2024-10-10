@@ -1,38 +1,42 @@
-import domain.MessageTask;
-import domain.Task;
+import Utils.BubbleSort;
+import Utils.QuickSort;
+import domain.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.printf("Hello and welcome!\n");
-        //Task t = new Task("1","asdf");
-        MessageTask m = new MessageTask("1","mesaj","Salut!","eu","tu", LocalDateTime.now());
-        MessageTask m1 = new MessageTask("1","mesaj","Salut!","eu","tu", LocalDateTime.now());
-        MessageTask m2 = new MessageTask("1","mesaj","Salut!","eu","tu", LocalDateTime.now());
-        MessageTask m3 = new MessageTask("1","mesaj","Salut!","eu","tu", LocalDateTime.now());
-        MessageTask m4 = new MessageTask("1","mesaj","Salut!","eu","tu", LocalDateTime.now());
-        m.execute();
-        MessageTask[] list2 = new MessageTask[5];
-        list2[0] = m;
-        list2[1] = m1;
-        list2[2] = m2;
-        list2[3] = m3;
-        list2[4] = m4;
-//        for(int i = 0; i < list2.length; i++){
-//            list2[i].execute();
-//        }
-        Collection<MessageTask> list = new ArrayList<>();
-        Collection<MessageTask> l = new HashSet<>();
-        list.add(m);
-        list.add(m1);
-        list.add(m2);
-        list.add(m3);
-        list.add(m4);
-        for(MessageTask mt : list){
-            mt.execute();
-        }
+//        int[] lista1 = {1,5,4,2,8,6,100,54,334,23};
+//        int[] lista2 = {1,5,4,2,8,6,100,54,334,23};
+//
+//        Task bubble = new SortingTask("1","Sortare cu Bubble",lista1,new BubbleSort());
+//        Task quick = new SortingTask("2","Sortare cu Quick",lista2,new QuickSort());
+//        bubble.execute();
+//        quick.execute();
+        // 10
+        Task m1 = new MessageTask("1","1","1","1","2", LocalDateTime.now());
+        Task m2 = new MessageTask("2","2","2","1","2", LocalDateTime.now());
+        Task m3 = new MessageTask("3","3","3","1","2", LocalDateTime.now());
+        Task m4 = new MessageTask("4","4","4","1","2", LocalDateTime.now());
+        TaskRunner tr = new StrategyTaskRunner(args[0]);
+        tr.addTask(m1);
+        tr.addTask(m2);
+        tr.addTask(m3);
+        tr.addTask(m4);
+        tr.executeAll();
+        TaskRunner tr2 = new DelayTaskRunner(tr);
+        TaskRunner tr3 = new PrinterTaskRunner(tr2);
+        tr2.addTask(m1);
+        tr2.addTask(m2);
+        tr2.addTask(m3);
+        tr2.addTask(m4);
+        tr2.executeAll();
+        tr3.addTask(m1);
+        tr3.addTask(m2);
+        tr3.addTask(m3);
+        tr3.addTask(m4);
+        tr3.executeAll();
+
     }
 }
 

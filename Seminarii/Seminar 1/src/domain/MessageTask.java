@@ -25,12 +25,12 @@ public class MessageTask extends Task {
                 "message='" + message + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
-                ", date=" + date +
+                ", date=" + date.format(Util.formatter) +
                 '}';
     }
 
     @Override
     public void execute() {
-        System.out.println("MessageTask executed! "+ date.format(Util.formatter) + "\n");
+        System.out.println("MessageTask executed! "+ date.format(Util.formatter) + toString() + "\n");
     }
 }
