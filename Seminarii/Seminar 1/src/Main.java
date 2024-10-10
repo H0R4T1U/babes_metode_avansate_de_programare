@@ -1,6 +1,10 @@
-import Utils.BubbleSort;
-import Utils.QuickSort;
-import domain.*;
+import decorator.DelayTaskRunner;
+import decorator.PrinterTaskRunner;
+import decorator.StrategyTaskRunner;
+import decorator.TaskRunner;
+import factory.Strategy;
+import model.MessageTask;
+import model.Task;
 
 import java.time.LocalDateTime;
 
@@ -14,11 +18,12 @@ public class Main {
 //        bubble.execute();
 //        quick.execute();
         // 10
+
         Task m1 = new MessageTask("1","1","1","1","2", LocalDateTime.now());
         Task m2 = new MessageTask("2","2","2","1","2", LocalDateTime.now());
         Task m3 = new MessageTask("3","3","3","1","2", LocalDateTime.now());
         Task m4 = new MessageTask("4","4","4","1","2", LocalDateTime.now());
-        TaskRunner tr = new StrategyTaskRunner(args[0]);
+        TaskRunner tr = new StrategyTaskRunner(Strategy.valueOf(args[0].toUpperCase()));
         tr.addTask(m1);
         tr.addTask(m2);
         tr.addTask(m3);

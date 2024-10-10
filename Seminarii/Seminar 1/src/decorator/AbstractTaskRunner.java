@@ -1,4 +1,4 @@
-package domain;
+package decorator;
 
 public abstract class AbstractTaskRunner  implements TaskRunner {
     TaskRunner taskRunner;
