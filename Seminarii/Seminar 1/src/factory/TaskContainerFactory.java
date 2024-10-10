@@ -1,4 +1,8 @@
-package domain;
+package factory;
+
+import model.Container;
+import model.QueueContainer;
+import model.StackContainer;
 
 import java.util.Objects;
 /*
@@ -24,11 +28,11 @@ public class TaskContainerFactory implements Factory {
         return instance;
     }
     @Override
-    public Container createContainer(String strategy) {
-        if(Objects.equals(strategy.toLowerCase(), "fifo")){
+    public Container createContainer(Strategy strategy) {
+        if(strategy == Strategy.FIFO){
             return new QueueContainer();
         }
-        if(Objects.equals(strategy.toLowerCase(), "lifo")){
+        if(strategy == Strategy.LIFO){
             return new StackContainer();
         }
         return null;

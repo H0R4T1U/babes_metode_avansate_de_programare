@@ -1,4 +1,6 @@
-package domain;
+package decorator;
+
+import model.Task;
 
 public interface TaskRunner {
     void executeOneTask(); // Executa un task din colectia de task uri de executat

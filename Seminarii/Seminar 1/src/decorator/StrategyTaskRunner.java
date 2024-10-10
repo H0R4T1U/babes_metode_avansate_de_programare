@@ -1,8 +1,13 @@
-package domain;
+package decorator;
+
+import factory.Strategy;
+import factory.TaskContainerFactory;
+import model.Container;
+import model.Task;
 
 public class StrategyTaskRunner implements TaskRunner {
     private Container container;
-    public StrategyTaskRunner(String strategy) {
+    public StrategyTaskRunner(Strategy strategy) {
         this.container = TaskContainerFactory.getInstance().createContainer(strategy);
     }
 

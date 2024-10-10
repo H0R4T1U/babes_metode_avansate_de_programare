@@ -1,8 +1,7 @@
-package domain;
+package model;
 
 
-
-public class StackContainer extends ContainerClass{
+public class StackContainer extends ContainerClass {
 
     @Override
     public Task remove() {

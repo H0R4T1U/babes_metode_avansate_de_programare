@@ -1,4 +1,6 @@
-package domain;
+package decorator;
+
+import model.Task;
 
 public class DelayTaskRunner extends AbstractTaskRunner {
     public DelayTaskRunner(TaskRunner taskRunner) {
