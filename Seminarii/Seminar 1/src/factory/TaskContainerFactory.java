@@ -21,6 +21,7 @@ public class TaskContainerFactory implements Factory {
 
 
     public static synchronized TaskContainerFactory getInstance() {
+        // Crează o instanta daca nu exista. returneaza instanta altfel
         if (instance == null) {
             instance = new TaskContainerFactory();
             return instance;
