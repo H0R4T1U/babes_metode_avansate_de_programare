@@ -1,4 +1,8 @@
 package Domain;
 
-public class Friendship {
+import java.time.LocalDateTime;
+
+public class Friendship extends Entity<Tuple<Long,Long>> {
+    public Friendship() {
+    }
 }

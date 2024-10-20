@@ -1,6 +1,6 @@
 package Utils;
 
-public class QuickSort implements AbstractSorter {
+public class xQuickSort implements AbstractSorter {
     @Override
     public void sort(int[] array) {
         quickSort(array, 0, array.length - 1);
