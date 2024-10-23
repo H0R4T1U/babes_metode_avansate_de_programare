@@ -4,6 +4,8 @@ import Domain.Entity;
 import Domain.User;
 import Repository.Repository;
 
+import java.util.List;
+
 public class EntityService<ID, E extends Entity<ID>> {
     protected Repository<ID, E> repository;
 

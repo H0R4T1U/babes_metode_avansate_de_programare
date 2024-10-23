@@ -5,8 +5,8 @@ import Domain.validators.Validator;
 
 import java.time.LocalDateTime;
 
-public class UtilizatorRepository extends AbstractFileRepository<Long, User>{
-    public UtilizatorRepository(Validator<User> validator, String fileName) {
+public class UserFileRepository extends AbstractFileRepository<Long, User>{
+    public UserFileRepository(Validator<User> validator, String fileName) {
         super(validator, fileName);
     }
 

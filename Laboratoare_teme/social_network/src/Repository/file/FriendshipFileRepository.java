@@ -5,8 +5,8 @@ import Domain.Tuple;
 import Domain.validators.Validator;
 
 
-public class FriendshipRepository extends AbstractFileRepository<Tuple<Long,Long>, Friendship> {
-    public FriendshipRepository(Validator<Friendship> validator, String fileName) {
+public class FriendshipFileRepository extends AbstractFileRepository<Tuple<Long,Long>, Friendship> {
+    public FriendshipFileRepository(Validator<Friendship> validator, String fileName) {
         super(validator, fileName);
     }
 
