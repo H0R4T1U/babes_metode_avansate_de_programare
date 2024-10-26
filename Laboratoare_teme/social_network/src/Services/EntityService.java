@@ -1,10 +1,9 @@
 package Services;
 
 import Domain.Entity;
-import Domain.User;
 import Repository.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 public class EntityService<ID, E extends Entity<ID>> {
     protected Repository<ID, E> repository;
@@ -13,15 +12,15 @@ public class EntityService<ID, E extends Entity<ID>> {
         this.repository = repository;
     }
 
-    public E create(E entity) {
+    public Optional<E> create(E entity) {
         return repository.save(entity);
     }
 
-    public E update(E entity) {
+    public Optional<E> update(E entity) {
         return repository.update(entity);
     }
 
-    public E delete(ID entityId) {
+    public Optional<E> delete(ID entityId) {
         return repository.delete(entityId);
     }
 
@@ -29,7 +28,7 @@ public class EntityService<ID, E extends Entity<ID>> {
         return repository.findAll();
     }
 
-    public E getById(ID entityId) {
+    public Optional<E> getById(ID entityId) {
         return repository.findOne(entityId);
     }
 }

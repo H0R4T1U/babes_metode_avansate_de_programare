@@ -20,8 +20,7 @@ public class UserFileRepository extends AbstractFileRepository<Long, User>{
 
     @Override
     public String saveEntity(User entity) {
-        String s = entity.getId() + ";" + entity.getUsername() + ";" + entity.getPassword() + ";" + entity.getPhoneNumber() + ";" +
+        return entity.getId() + ";" + entity.getUsername() + ";" + entity.getPassword() + ";" + entity.getPhoneNumber() + ";" +
                 entity.getJoinDate() + ";" + entity.getAge();
-        return s;
     }
 }

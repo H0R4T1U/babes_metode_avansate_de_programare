@@ -7,6 +7,7 @@ import Repository.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<ID,E> {
     protected final Map<ID, E> entities;
@@ -18,11 +19,12 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     }
 
     @Override
-    public E findOne(ID id) throws IllegalArgumentException{
+    public Optional<E> findOne(ID id) throws IllegalArgumentException{
         if(id == null){
             throw new IllegalArgumentException("ID cannot be null");
         }
-        return entities.get(id);
+        return Optional.ofNullable(entities.get(id));
+
     }
 
     @Override
@@ -31,29 +33,29 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     }
 
     @Override
-    public E save(E entity) throws ValidationException {
+    public Optional<E> save(E entity) throws ValidationException {
 
         if(entity == null) {
             throw new IllegalArgumentException("ENTITY CANNOT BE NULL");
         }
         validator.validate(entity);
         if(entities.containsKey(entity.getId())) {
-            return entity;
+            return Optional.ofNullable(entities.get(entity.getId()));
         }
         entities.put(entity.getId(), entity);
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public E delete(ID id) throws IllegalArgumentException {
+    public Optional<E> delete(ID id) throws IllegalArgumentException {
         if(id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-        return entities.remove(id);
+        return Optional.ofNullable(entities.remove(id));
     }
 
     @Override
-    public E update(E entity) throws ValidationException {
+    public Optional<E> update(E entity) throws ValidationException {
         if(entity == null) {
             throw new IllegalArgumentException("ENTITY CANNOT BE NULL");
         }
@@ -61,6 +63,6 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
         if(entities.containsKey(entity.getId())) {
             entities.put(entity.getId(), entity);
         }
-        return entity;
+        return Optional.of(entity);
     }
 }

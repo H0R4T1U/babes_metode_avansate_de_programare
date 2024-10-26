@@ -1,12 +1,11 @@
 package Services;
 
-import Domain.Entity;
 import Domain.Friendship;
 import Domain.Tuple;
-import Domain.User;
 import Repository.Repository;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendship> {
     UserService userService;
@@ -17,16 +16,16 @@ public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendshi
 
     private static void createGraph(List<Friendship> friendships, Map<Long, List<Long>> graph) {
         if (friendships == null || friendships.isEmpty()) return;
-        for (Friendship friendship : friendships) {
+        friendships.forEach(friendship -> {
             Long person1 = friendship.getId().getE1();
             Long person2 = friendship.getId().getE2();
             addEdge(person1, person2, graph);
             addEdge(person2, person1, graph);
-        }
+        });
     }
 
     private static void addEdge(Long source, Long destination, Map<Long, List<Long>> graph) {
-        graph.computeIfAbsent(source, k -> new ArrayList<>()).add(destination);
+        graph.computeIfAbsent(source, _ -> new ArrayList<>()).add(destination);
     }
 
     private static void dfs(Long node, Set<Long> visited, Map<Long, List<Long>> graph, boolean saveComponent, List<Long> currentComponent) {
@@ -50,38 +49,42 @@ public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendshi
         createGraph(friendships, graph);
         List<Long> mostSocialCommunity = findLongestPath(graph);
 
-        for (Long id : mostSocialCommunity) {
-            User user = userService.getById(id);
-            if (user != null) {
-                stringBuilder.append(user).append(", ");
-            }
-        }
+        mostSocialCommunity.stream().map(id -> userService.getById(id))
+                .filter(Optional::isPresent).
+                forEach(usr -> stringBuilder.append(usr).append(", "));
+//        mostSocialCommunity.forEach(id ->{
+//            Optional<User> usr = userService.getById(id);
+//            if(usr.isPresent()){
+//                stringBuilder.append(usr).append(", ");
+//            }
+//        });
         return stringBuilder.toString();
     }
     private int noConnectedComponents(List<Friendship> friendships) {
         Map<Long, List<Long>> graph = new HashMap<>();
         createGraph(friendships, graph);
         Set<Long> visited = new HashSet<>();
-        int components = 0;
-        for (User user : userService.getAll()) {
-            if (!graph.containsKey(user.getId()))
-                components++;
-        }
-        for (Long node : graph.keySet())
-            if (!visited.contains(node)) {
-                components++;
-                dfs(node, visited, graph, false, new ArrayList<>());
+        AtomicInteger components = new AtomicInteger();
+        userService.getAll().forEach(user ->{
+            if(!graph.containsKey(user.getId())){
+                components.getAndIncrement();
             }
-        return components;
+        });
+        graph.keySet().stream().filter(node -> !visited.contains(node)).forEach(node -> {
+            components.getAndIncrement();
+            dfs(node, visited, graph, false, new ArrayList<>());
+        });
+        return components.get();
     }
 
     private List<Long> findLongestPath(Map<Long, List<Long>> graph) {
         List<Long> longestPath = new ArrayList<>();
         Set<Long> visited = new HashSet<>();
-        for (Long node : graph.keySet()) {
+        graph.keySet().forEach(node ->{
             List<Long> currentPath = new ArrayList<>();
             dfsForLongestPath(node, visited, graph, currentPath, longestPath);
-        }
+        });
+
         return longestPath;
     }
 
@@ -89,9 +92,9 @@ public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendshi
         visited.add(node);
         currentPath.add(node);
         if (graph.containsKey(node))
-            for (Long neighbor : graph.get(node))
-                if (!visited.contains(neighbor))
-                    dfsForLongestPath(neighbor, visited, graph, currentPath, longestPath);
+            graph.get(node).stream()
+                    .filter(neighbor -> !visited.contains(neighbor))
+                    .forEach(neighbor -> dfsForLongestPath(neighbor, visited, graph, currentPath, longestPath));
         if (currentPath.size() > longestPath.size()) {
             longestPath.clear();
             longestPath.addAll(currentPath);

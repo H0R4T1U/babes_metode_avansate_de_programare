@@ -11,24 +11,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Console{
-    private UserService userService;
-    private FriendshipService friendshipService;
+    private final UserService userService;
+    private final FriendshipService friendshipService;
 
     public Console(UserService userService, FriendshipService friendshipService) {
         this.userService = userService;
         this.friendshipService = friendshipService;
     }
     private void showMenu() {
-        System.out.println("1. add user\n" +
-                "2. remove user\n" +
-                "3. view users\n" +
-                "4. add friendship\n" +
-                "5. remove friendship\n" +
-                "6. view number of communities\n" +
-                "7. view most sociable community\n" +
-                "0. exit\n");
+        System.out.println("""
+                1. add user
+                2. remove user
+                3. view users
+                4. add friendship
+                5. remove friendship
+                6. view number of communities
+                7. view most sociable community
+                0. exit
+                """);
     }
     private void executeInput(int option) {
         switch (option) {
@@ -54,7 +57,6 @@ public class Console{
                 mostSociableNetwork();
                 return;
             default:
-                return;
         }
     }
     
@@ -112,7 +114,7 @@ public class Console{
             Long id1 = Long.parseLong(reader.readLine());
             System.out.println("ID user2: ");
             Long id2 = Long.parseLong(reader.readLine());
-            if(userService.getById(id1) != null && userService.getById(id2)!=null){
+            if(userService.getById(id1).isPresent() && userService.getById(id2).isPresent()){
                 Friendship friendship = new Friendship();
                 friendship.setId(new Tuple<>(id1,id2));
                 friendshipService.create(friendship);
@@ -130,14 +132,16 @@ public class Console{
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try{
             Long id = Long.parseLong(reader.readLine());
-            String name = userService.getById(id).getUsername();
-            if(! name.isEmpty()){
-                System.out.println("Deleteing User:"+ name  );
-                userService.delete(id);
-            }else{
-                System.out.println("User not found");
+            Optional<User> userOptional = userService.getById(id);
+            if(userOptional.isPresent()){
+                String  name = userOptional.get().getUsername();
+                if(! name.isEmpty()){
+                    System.out.println("Deleteing User:"+ name  );
+                    userService.delete(id);
+                }else{
+                    System.out.println("User not found");
+                }
             }
-
 
         }catch(IOException  | IllegalArgumentException e){
             System.out.println("Error reading input: \n" + e.getMessage());
@@ -153,7 +157,7 @@ public class Console{
             Long id1 = Long.parseLong(reader.readLine());
             System.out.println("ID user2: ");
             long id2 = Long.parseLong(reader.readLine());
-            if(userService.getById(id1) != null && userService.getById(id2)!=null){
+            if(userService.getById(id1).isPresent() && userService.getById(id2).isPresent()){
                 friendshipService.delete(new Tuple<>(id1,id2));
             }
         } catch( IOException | IllegalArgumentException e){
