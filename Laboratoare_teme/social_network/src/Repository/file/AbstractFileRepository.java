@@ -61,7 +61,7 @@ public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends I
     @Override
     public Optional<E> delete(ID id) {
         Optional<E> entity = super.delete(id);
-        if (entity.isEmpty()) writeToFile();
+        if (entity.isPresent()) writeToFile();
         return entity;
     }
 

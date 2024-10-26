@@ -114,7 +114,7 @@ public class Console{
             Long id1 = Long.parseLong(reader.readLine());
             System.out.println("ID user2: ");
             Long id2 = Long.parseLong(reader.readLine());
-            if(userService.getById(id1).isPresent() && userService.getById(id2).isPresent()){
+            if(userService.getById(id1).isPresent() && userService.getById(id2).isPresent() && !id1.equals(id2)){
                 Friendship friendship = new Friendship();
                 friendship.setId(new Tuple<>(id1,id2));
                 friendshipService.create(friendship);
@@ -138,6 +138,7 @@ public class Console{
                 if(! name.isEmpty()){
                     System.out.println("Deleteing User:"+ name  );
                     userService.delete(id);
+                    friendshipService.deletedUser(id);
                 }else{
                     System.out.println("User not found");
                 }

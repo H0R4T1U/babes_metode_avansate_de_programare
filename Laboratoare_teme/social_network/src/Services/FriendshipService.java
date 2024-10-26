@@ -13,7 +13,14 @@ public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendshi
         super(repository);
         this.userService = userService;
     }
-
+    public void deletedUser(Long id){
+        List<Friendship> friendships = new ArrayList<>((Collection<Friendship>) getAll());
+        friendships.forEach(friendship -> {
+            if(friendship.getId().getE1().equals(id) || friendship.getId().getE2().equals(id)){
+                delete(friendship.getId());
+            }
+        });
+    }
     private static void createGraph(List<Friendship> friendships, Map<Long, List<Long>> graph) {
         if (friendships == null || friendships.isEmpty()) return;
         friendships.forEach(friendship -> {
@@ -39,6 +46,10 @@ public class FriendshipService extends EntityService<Tuple<Long,Long>, Friendshi
     }
     public int getNumberOfCommunities() {
         List<Friendship> friendships = new ArrayList<>((Collection<Friendship>) getAll());
+        friendships.removeIf(friendship ->
+                userService.getById(friendship.getId().getE1()).isEmpty() ||
+                userService.getById(friendship.getId().getE2()).isEmpty()
+        );
         return noConnectedComponents(friendships);
     }
 
